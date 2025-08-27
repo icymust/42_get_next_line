@@ -6,10 +6,12 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 11:53:25 by mmustone          #+#    #+#             */
-/*   Updated: 2025/08/22 11:53:31 by mmustone         ###   ########.fr       */
+/*   Updated: 2025/08/27 14:16:41 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 char *get_next_line(int fd){
+    if(!fd)
+        return(NULL);
     
 }
