@@ -1,5 +1,5 @@
 NAME = get_next_line.a
-MANDATORY = get_next_line.c 
+MANDATORY = get_next_line.c get_next_line_utils.c
 
 OBJ_PATH = ${MANDATORY:.c=.o}
 BONUS_PATH = ${BONUS:.c=.o}
