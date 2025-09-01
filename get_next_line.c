@@ -43,8 +43,11 @@ char	*get_next_line(int fd)
         stash = NULL;
 		return (NULL);
 	}
-    if(stash == NULL || stash[0] == '\0')
+    if(stash == NULL || stash[0] == '\0'){
+        free(stash);
+        stash = NULL;
         return(NULL);
+    }
 
 	// Найти \n в stash, Найти границу строки и посчитать длину
 	char *nl = gnl_strchr(stash, '\n');
@@ -61,16 +64,21 @@ char	*get_next_line(int fd)
 		return NULL;
 	}
 	
-	int i = 0;
+	size_t i = 0;
 	while(i < line_len){
 		line[i] = stash[i];
 		i++;
 	}
 	line[i] = '\0';
-	//нужно обновить stash, убрать от туда строку кторый мы скопировали
-	i = 0;
-	while(stash[line_len]){
-		temp[i++] = stash(line_len++);
-	}
+    // Обновить stash, убрать скопированную строку
+	if (nl) {
+        char *new_stash = gnl_strjoin(NULL, nl + 1); // копируем остаток после \n
+        free(stash);
+        stash = new_stash;
+    } else {
+        free(stash);
+        stash = NULL;
+    }
+    return line;
 
 }

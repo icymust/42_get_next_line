@@ -56,3 +56,38 @@ char *gnl_strjoin(char *s1, const char *s2){
     free(s1);
     return ns;
 }
+
+//проверить функции и интегрировать в код
+
+char *gnl_substr(const char *s, size_t start, size_t len) {
+    if (!s)
+        return NULL;
+    size_t slen = gnl_strlen(s);
+    if (start >= slen)
+        return gnl_strjoin(NULL, ""); // пустая строка
+    if (len > slen - start)
+        len = slen - start;
+    char *sub = malloc(len + 1);
+    if (!sub)
+        return NULL;
+    size_t i = 0;
+    while (i < len && s[start + i]) {
+        sub[i] = s[start + i];
+        i++;
+    }
+    sub[i] = '\0';
+    return sub;
+}
+
+char *gnl_strdup(const char *s) {
+    if (!s)
+        return NULL;
+    size_t len = gnl_strlen(s);
+    char *dup = malloc(len + 1);
+    if (!dup)
+        return NULL;
+    for (size_t i = 0; i < len; i++)
+        dup[i] = s[i];
+    dup[len] = '\0';
+    return dup;
+}
