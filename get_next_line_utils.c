@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 13:05:16 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/02 14:50:45 by mmustone         ###   ########.fr       */
+/*   Updated: 2025/09/02 16:48:14 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,12 @@ char	*gnl_strjoin(char *s1, const char *s2)
 		}
 	}
 	j = 0;
-	while (s2 && s2[j])
-	{
+	while (s2 && s2[j]){
 		ns[i + j] = s2[j];
-		j++;
-	}
+        j++;
+    }
 	ns[i + j] = '\0';
-	free(s1);
-	return (ns);
+	return (free(s1), ns);
 }
 
 //проверить функции и интегрировать в код
@@ -102,10 +100,13 @@ char	*gnl_substr(const char *s, size_t start, size_t len)
 
 char	*gnl_strdup(const char *s)
 {
+	size_t	len;
+	char	*dup;
+
 	if (!s)
 		return (NULL);
-	size_t len = gnl_strlen(s);
-	char *dup = malloc(len + 1);
+	len = gnl_strlen(s);
+	dup = malloc(len + 1);
 	if (!dup)
 		return (NULL);
 	for (size_t i = 0; i < len; i++)
