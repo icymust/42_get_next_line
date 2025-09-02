@@ -13,5 +13,7 @@ char *get_next_line(int fd);
 size_t gnl_strlen(const char *s);
 char *gnl_strchr(const char *s, size_t c);
 char *gnl_strjoin(char *s1, const char *s2);
+char *gnl_strdup(const char *s);
+char *gnl_substr(const char *s, size_t start, size_t len);
 
 #endif
