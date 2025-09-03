@@ -41,15 +41,11 @@ char	*gnl_strchr(const char *s, size_t c)
 
 char	*gnl_strjoin(char *s1, const char *s2)
 {
-	size_t	len1;
-	size_t	len2;
 	char	*ns;
 	size_t	i;
 	size_t	j;
 
-	len1 = gnl_strlen(s1);
-	len2 = gnl_strlen(s2);
-	ns = malloc(len1 + len2 + 1);
+	ns = malloc(gnl_strlen(s1) + gnl_strlen(s2) + 1);
 	if (!ns)
 		return (NULL);
 	i = 0;

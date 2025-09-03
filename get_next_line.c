@@ -12,28 +12,33 @@
 
 #include "get_next_line.h"
 
-static int	read_to_stash(int fd, char **stash)
+static int  read_to_stash(int fd, char **stash)
 {
-	char	buf[BUFFER_SIZE + 1];
-	ssize_t	bytes;
-	char	*temp;
+    char    buf[BUFFER_SIZE + 1];
+    ssize_t bytes;
+    char    *tmp;
+    int     found_nl;
 
-	while (!gnl_strchr(*stash, '\n') && (bytes = read(fd, buf,
-				BUFFER_SIZE)) > 0)
-	{
-		buf[bytes] = '\0';
-		temp = gnl_strjoin(*stash, buf);
-		if (!temp)
-			return (free(*stash), *stash = NULL, 0);
-		*stash = temp;
-	}
-	if (bytes < 0)
-	{
-		free(*stash);
-		*stash = NULL;
-		return (0);
-	}
-	return (bytes >= 0);
+    if (!stash)
+        return (0);
+    if (*stash && gnl_strchr(*stash, '\n'))   // уже есть строка -> не читаем
+        return (1);
+    found_nl = 0;
+    while ((bytes = read(fd, buf, BUFFER_SIZE)) > 0)
+    {
+        buf[bytes] = '\0';
+        if (gnl_strchr(buf, '\n'))
+            found_nl = 1;
+        tmp = gnl_strjoin(*stash, buf);
+        if (!tmp)
+            return (free(*stash), *stash = NULL, 0);
+        *stash = tmp;
+        if (found_nl)
+            break;
+    }
+    if (bytes < 0)
+        return (free(*stash), *stash = NULL, 0);
+    return (1);
 }
 
 static char	*extract_line(char **stash)
@@ -44,19 +49,29 @@ static char	*extract_line(char **stash)
 	char	*new_stash;
 
 	nl = gnl_strchr(*stash, '\n');
-	len = nl ? (nl - *stash + 1) : gnl_strlen(*stash);
+	if (nl)
+		len = nl - *stash + 1;
+	else
+		len = gnl_strlen(*stash);
 	line = gnl_substr(*stash, 0, len);
 	if (!line)
-		return (free(*stash), *stash = NULL, NULL);
-	new_stash = nl ? gnl_strdup(nl + 1) : NULL;
+	{
+		free(*stash);
+		*stash = NULL;
+		return NULL;
+	}
+	if (nl)
+		new_stash = gnl_strdup(nl + 1);
+	else
+		new_stash = NULL;
 	free(*stash);
 	*stash = new_stash;
-	return (line);
+	return line;
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
+	static char	*stash;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || !read_to_stash(fd, &stash))
 		return (NULL);
