@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 11:53:25 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/05 13:54:21 by mmustone         ###   ########.fr       */
+/*   Updated: 2025/09/05 18:13:18 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,41 @@ static int	check_stash(char **stash)
 
 static int	read_to_stash(int fd, char **stash)
 {
-	char	buf[BUFFER_SIZE + 1];
-	ssize_t	bytes;
-	char	*tmp;
-	int		found_nl;
+    char	*buf;
+    ssize_t	bytes;
+    char	*tmp;
+    int		found_nl;
 
-	if (check_stash(stash))
-		return (1);
-	found_nl = 0;
-	bytes = read(fd, buf, BUFFER_SIZE);
-	while (bytes > 0)
-	{
-		buf[bytes] = '\0';
-		if (gnl_strchr(buf, '\n'))
-			found_nl = 1;
-		tmp = gnl_strjoin(*stash, buf);
-		if (!tmp)
-			return (handle_error(stash));
-		*stash = tmp;
-		if (found_nl)
-			break ;
-		bytes = read(fd, buf, BUFFER_SIZE);
-	}
-	if (bytes < 0)
-		return (handle_error(stash));
-	return (1);
+    buf = malloc(BUFFER_SIZE + 1);
+    if (!buf)
+        return (handle_error(stash));
+    if (check_stash(stash))
+    {
+        free(buf);
+        return (1);
+    }
+    found_nl = 0;
+    bytes = read(fd, buf, BUFFER_SIZE);
+    while (bytes > 0)
+    {
+        buf[bytes] = '\0';
+        if (gnl_strchr(buf, '\n'))
+            found_nl = 1;
+        tmp = gnl_strjoin(*stash, buf);
+        if (!tmp)
+        {
+            free(buf);
+            return (handle_error(stash));
+        }
+        *stash = tmp;
+        if (found_nl)
+            break ;
+        bytes = read(fd, buf, BUFFER_SIZE);
+    }
+    free(buf);
+    if (bytes < 0)
+        return (handle_error(stash));
+    return (1);
 }
 
 static char	*extract_line(char **stash)
