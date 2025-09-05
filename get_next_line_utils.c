@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 13:05:16 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/02 16:48:14 by mmustone         ###   ########.fr       */
+/*   Updated: 2025/09/05 11:25:42 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,14 @@ char	*gnl_strjoin(char *s1, const char *s2)
 		}
 	}
 	j = 0;
-	while (s2 && s2[j]){
+	while (s2 && s2[j])
+	{
 		ns[i + j] = s2[j];
-        j++;
-    }
+		j++;
+	}
 	ns[i + j] = '\0';
 	return (free(s1), ns);
 }
-
-//проверить функции и интегрировать в код
 
 char	*gnl_substr(const char *s, size_t start, size_t len)
 {
@@ -78,7 +77,7 @@ char	*gnl_substr(const char *s, size_t start, size_t len)
 		return (NULL);
 	slen = gnl_strlen(s);
 	if (start >= slen)
-		return (gnl_strjoin(NULL, "")); // пустая строка
+		return (gnl_strjoin(NULL, ""));
 	if (len > slen - start)
 		len = slen - start;
 	sub = malloc(len + 1);
@@ -98,15 +97,20 @@ char	*gnl_strdup(const char *s)
 {
 	size_t	len;
 	char	*dup;
+	size_t	i;
 
+	i = 0;
 	if (!s)
 		return (NULL);
 	len = gnl_strlen(s);
 	dup = malloc(len + 1);
 	if (!dup)
 		return (NULL);
-	for (size_t i = 0; i < len; i++)
+	while (i < len)
+	{
 		dup[i] = s[i];
+		i++;
+	}
 	dup[len] = '\0';
 	return (dup);
 }
