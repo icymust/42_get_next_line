@@ -22,45 +22,44 @@ static int	handle_error(char **stash)
 	return (0);
 }
 
-static int	check_stash(char **stash)
+// static int	check_stash(char **stash)
+// {
+// 	if (!stash)
+// 		return (0);
+// 	if (*stash && gnl_strchr(*stash, '\n'))
+// 		return (1);
+// 	return (0);
+// }
+
+static int	append_chunk(char **stash, char *buf, ssize_t n)
 {
-	if (!stash)
-		return (0);
-	if (*stash && gnl_strchr(*stash, '\n'))
-		return (1);
-	return (0);
+    char	*tmp;
+
+    buf[n] = '\0';
+    tmp = gnl_strjoin(*stash, buf);
+    if (!tmp)
+        return (0);
+    *stash = tmp;
+    return (1);
 }
 
 static int	read_to_stash(int fd, char **stash)
 {
     char	*buf;
     ssize_t	bytes;
-    char	*tmp;
-    int		found_nl;
 
-    buf = malloc(BUFFER_SIZE + 1);
+    buf = malloc((size_t)BUFFER_SIZE + 1);
     if (!buf)
         return (handle_error(stash));
-    if (check_stash(stash))
-    {
-        free(buf);
-        return (1);
-    }
-    found_nl = 0;
     bytes = read(fd, buf, BUFFER_SIZE);
     while (bytes > 0)
     {
-        buf[bytes] = '\0';
-        if (gnl_strchr(buf, '\n'))
-            found_nl = 1;
-        tmp = gnl_strjoin(*stash, buf);
-        if (!tmp)
+        if (!append_chunk(stash, buf, bytes))
         {
             free(buf);
             return (handle_error(stash));
         }
-        *stash = tmp;
-        if (found_nl)
+        if (gnl_strchr(buf, '\n'))
             break ;
         bytes = read(fd, buf, BUFFER_SIZE);
     }

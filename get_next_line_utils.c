@@ -77,7 +77,7 @@ char	*gnl_substr(const char *s, size_t start, size_t len)
 		return (NULL);
 	slen = gnl_strlen(s);
 	if (start >= slen)
-		return (gnl_strjoin(NULL, ""));
+		return (gnl_strdup(""));
 	if (len > slen - start)
 		len = slen - start;
 	sub = malloc(len + 1);
