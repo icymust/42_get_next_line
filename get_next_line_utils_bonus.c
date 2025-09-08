@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/29 13:05:16 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/08 15:40:44 by mmustone         ###   ########.fr       */
+/*   Created: 2025/09/08 16:25:12 by mmustone          #+#    #+#             */
+/*   Updated: 2025/09/08 16:25:19 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	gnl_strlen(const char *s)
 {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 11:53:25 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/08 15:41:20 by mmustone         ###   ########.fr       */
+/*   Created: 2025/09/08 16:12:49 by mmustone          #+#    #+#             */
+/*   Updated: 2025/09/08 16:31:09 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	handle_error(char **stash)
 {
@@ -89,14 +89,14 @@ char	*extract_line(char **stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[1024];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !read_to_stash(fd, &stash))
+	if (fd < 0 || BUFFER_SIZE <= 0 || !read_to_stash(fd, &stash[fd]))
 		return (NULL);
-	if (!stash || stash[0] == '\0')
+	if (!stash[fd] || stash[fd][0] == '\0')
 	{
-		handle_error(&stash);
+		handle_error(&stash[fd]);
 		return (NULL);
 	}
-	return (extract_line(&stash));
+	return (extract_line(&stash[fd]));
 }
