@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 16:12:49 by mmustone          #+#    #+#             */
-/*   Updated: 2025/09/08 16:31:09 by mmustone         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:08:18 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ char	*extract_line(char **stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash[1024];
+	static char	*stash[MAXF];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !read_to_stash(fd, &stash[fd]))
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= MAXF || !read_to_stash(fd,
+			&stash[fd]))
 		return (NULL);
 	if (!stash[fd] || stash[fd][0] == '\0')
 	{
